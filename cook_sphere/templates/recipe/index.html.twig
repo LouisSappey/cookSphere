@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recipes{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Recipes</h1>
+        
+        {# Search and Filter Form #}
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" action="{{ path('recipe_index') }}" class="row g-3">
+                    {# Search Input #}
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ currentSearch }}" placeholder="Search recipes...">
+                    </div>
+
+                    {# Category Filter #}
+                    <div class="col-md-4">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}" 
+                                    {% if currentCategory is not null and currentCategory == category.id %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {# Tags Filter #}
+                    <div class="col-md-4">
+                        <label class="form-label">Tags</label>
+                        <div class="tags-container">
+                            {% for tag in tags %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="tags[]" value="{{ tag.id }}" id="tag_{{ tag.id }}"
+                                           {% if tag.id in currentTags %}checked{% endif %}>
+                                    <label class="form-check-label" for="tag_{{ tag.id }}">
+                                        {{ tag.name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {# Submit Button #}
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        <a href="{{ path('recipe_index') }}" class="btn btn-secondary">Clear Filters</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {# Recipe List #}
+        <div class="row">
+            {% if recipes is empty %}
+                <div class="col-12">
+                    <p>No recipes found matching your criteria.</p>
+                </div>
+            {% else %}
+                {% for recipe in recipes %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ recipe.title }}</h5>
+                                <p class="card-text">{{ recipe.description }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="{{ path('recipe_steps', { id: recipe.id }) }}" 
+                                       class="btn btn-primary btn-sm">View Recipe</a>
+                                    {% if app.user == recipe.author %}
+                                        <a href="{{ path('recipe_edit', { id: recipe.id }) }}" 
+                                           class="btn btn-secondary btn-sm">Edit</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">
+                                    Category: {{ recipe.category.name }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <a href="{{ path('recipe_new') }}" class="btn btn-success mb-3">Create New Recipe</a>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .tags-container {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+{% endblock %} 

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Step{% endblock %}
+
+{% block body %}
+    <h1>Add Step to {{ recipe.title }}</h1>
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">Add Step</button>
+    {{ form_end(form) }}
+    <a href="{{ path('recipe_steps', { id: recipe.id }) }}">Back to Steps</a>
+{% endblock %} 

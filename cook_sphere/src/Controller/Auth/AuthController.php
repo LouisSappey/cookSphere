@@ -50,7 +50,7 @@ class AuthController extends AbstractController
             $entityManager->flush();
     
             $emailMessage = (new \Symfony\Bridge\Twig\Mime\TemplatedEmail())
-                ->from('contact@streemi.fr')
+                ->from('contact@cook_sphere.fr')
                 ->to($user->getEmail())
                 ->subject('Réinitialisation de votre mot de passe')
                 ->htmlTemplate('email/reset.html.twig')

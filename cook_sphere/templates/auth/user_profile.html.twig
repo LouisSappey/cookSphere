@@ -1,20 +1,129 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votre Profil</title>
-    <!-- Add Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 p-4">
-    <div class="container mx-auto">
-        <div class="bg-white p-4 rounded shadow-md">
-            <h1 class="text-xl mb-4">Votre Profil</h1>
-            <p class="text-gray-700">Nom: {{ app.user.username }}</p>
-            <p class="text-gray-700">Email: {{ app.user.email }}</p>
-            <a href="{{ path('page_homepage') }}" class="mt-2 block bg-blue-500 text-white px-4 py-2 rounded">Retour à l'accueil</a>
+{% extends 'base.html.twig' %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-circle fa-4x text-gray-500"></i>
+                        <h2 class="mt-2">{{ app.user.username }}</h2>
+                        <p class="text-muted">{{ app.user.email }}</p>
+                    </div>
+                    
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="badge bg-primary mb-3">Administrator</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Profile Edit Form #}
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0 h5">
+                        <i class="fas fa-user-edit me-2"></i>Edit Profile
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.username, 'Username', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.username) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.plainPassword, 'New Password (leave blank to keep current)', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.plainPassword) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-utensils me-2"></i>Your Recipes
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if recipes is empty %}
+                        <p class="text-muted text-center py-4">
+                            <i class="fas fa-info-circle me-2"></i>You haven't created any recipes yet.
+                        </p>
+                        <div class="text-center">
+                            <a href="{{ path('recipe_new') }}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Create Your First Recipe
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="row g-4">
+                            {% for recipe in recipes %}
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ recipe.title }}</h5>
+                                            <p class="card-text text-muted small">
+                                                <i class="fas fa-calendar me-1"></i>
+                                                Created: {{ recipe.createdAt|date('d M Y') }}
+                                            </p>
+                                            <p class="card-text">{{ recipe.description }}</p>
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <a href="{{ path('recipe_steps', {'id': recipe.id}) }}" 
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye me-1"></i>View
+                                                </a>
+                                                <div class="btn-group">
+                                                    <a href="{{ path('recipe_edit', {'id': recipe.id}) }}" 
+                                                       class="btn btn-sm btn-outline-secondary">
+                                                        <i class="fas fa-edit me-1"></i>Edit
+                                                    </a>
+                                                    <form action="{{ path('recipe_delete', {'id': recipe.id}) }}" 
+                                                          method="POST" 
+                                                          class="d-inline"
+                                                          onsubmit="return confirm('Are you sure you want to delete this recipe?');">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i class="fas fa-trash me-1"></i>Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-light">
+                                            <small class="text-muted">
+                                                Category: {{ recipe.category.name }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <a href="{{ path('recipe_new') }}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Create New Recipe
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

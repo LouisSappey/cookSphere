@@ -2,10 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
-use App\Enum\UserAccountStatusEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use App\Entity\User;
+use App\Enum\UserAccountStatusEnum;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -16,13 +16,6 @@ class AppFixtures extends Fixture
     public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         $this->passwordHasher = $passwordHasher;
-    }
-
-    public function load(ObjectManager $manager)
-    {
-        $users = $this->loadUsers($manager);
-
-        $manager->flush();
     }
 
     private function loadUsers(ObjectManager $manager): array
@@ -36,7 +29,7 @@ class AppFixtures extends Fixture
             $user->setUsername($data['username'])
                  ->setEmail($data['email'])
                  ->setPassword($this->passwordHasher->hashPassword($user, $data['password']))
-                 ->setAccountStatus(UserAccountStatusEnum::from($data['account_status']))
+                 ->setAccountStatus(UserAccountStatusEnum::VALID)
                  ->setRoles($data['roles']);
 
             $manager->persist($user);
@@ -44,5 +37,16 @@ class AppFixtures extends Fixture
         }
 
         return $userEntities;
+    }
+    public function load(ObjectManager $manager): void
+    {
+        $manager->flush();
+        
+        // Load individual fixtures
+        $users = $this->loadUsers($manager);
+        (new TagFixtures())->load($manager);
+        (new CategoryFixtures())->load($manager);
+        (new IngredientFixtures())->load($manager);
+        (new RecipeFixtures())->load($manager);
     }
 }

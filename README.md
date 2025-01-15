@@ -10,14 +10,14 @@
 -(docker compose up)
 ```
 
-Now go to folder streemi and do:
+Now go to folder cook_sphere and do:
 
 ```
 cd cook_sphere
 composer install
 ```
 
-After that you can go to streemi folder and launch fixtures:
+After that you can go to cook_sphere folder and launch fixtures:
 
 ```
 ./launch-fixtures.sh

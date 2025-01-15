@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Recipe{% endblock %}
+
+{% block body %}
+    <h1 class="mt-4">Create Recipe</h1>
+    {{ form_start(form, {
+        'attr': {
+            'class': 'needs-validation',
+            'novalidate': 'novalidate',
+            'enctype': 'multipart/form-data'
+        }
+    }) }}
+        <div class="form-group">
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.preparationTime) }}
+            {{ form_widget(form.preparationTime, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.cookingTime) }}
+            {{ form_widget(form.cookingTime, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.servings) }}
+            {{ form_widget(form.servings, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.difficulty) }}
+            {{ form_widget(form.difficulty, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.category) }}
+            {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.tags) }}
+            {{ form_widget(form.tags, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div id="steps" data-prototype="{{ form_widget(form.steps.vars.prototype)|e('html') }}">
+            {% for step in form.steps %}
+                <div class="step mb-3">
+                    <h5>Step {{ loop.index + 1 }}</h5>
+                    {{ form_row(step.description, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(step.orderNumber, {'attr': {'class': 'form-control'}}) }}
+                    <button type="button" class="remove-step btn btn-danger btn-sm">Remove Step</button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button class="btn btn-success" id="add-step">Add Step</button>
+        <button class="btn btn-primary">Create Recipe</button>  
+        <a href="{{ path('recipe_index') }}" class="btn btn-secondary">Cancel</a>
+{{ form_end(form) }}
+    {{ form_end(form) }}
+
+    <script>
+        document.getElementById('add-step').addEventListener('click', function(e) {
+            e.preventDefault();
+            var collectionHolder = document.getElementById('steps');
+            var prototype = collectionHolder.dataset.prototype;
+            var index = collectionHolder.children.length;
+            var newForm = prototype.replace(/__step__/g, index);
+            collectionHolder.insertAdjacentHTML('beforeend', newForm);
+        });
+
+        document.getElementById('steps').addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-step')) {
+                e.preventDefault();
+                e.target.closest('.step').remove();
+            }
+        });
+    </script>
+{% endblock %}

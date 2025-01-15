@@ -1,58 +1,45 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
-use App\Enum\UserAccountStatusEnum;
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Enum\UserAccountStatusEnum;
+use App\Repository\UserRepository;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface,  PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $username = null;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
     private ?string $password = null;
-
-    #[ORM\Column(enumType: UserAccountStatusEnum::class)]
-    private ?UserAccountStatusEnum $accountStatus = null;
 
     #[ORM\Column]
     private array $roles = [];
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $resetPasswordToken = null;
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $username = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $accountStatus = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $resetPasswordToken = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): static
-    {
-        $this->username = $username;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -63,7 +50,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -75,56 +61,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    public function getAccountStatus(): ?UserAccountStatusEnum
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    public function getSalt(): ?string
+    {
+        return null; // Not needed for modern algorithms
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Clear any temporary sensitive data
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email; // Assuming email is used as the unique identifier
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    public function getAccountStatus(): ?string
     {
         return $this->accountStatus;
     }
 
     public function setAccountStatus(UserAccountStatusEnum $accountStatus): static
     {
-        $this->accountStatus = $accountStatus;
-
+        $this->accountStatus = $accountStatus->value; // Store the enum value
         return $this;
     }
 
-    public function getRoles(): array
+    public function getResetPasswordToken(): ?string
     {
-        // Guarantee every user has at least ROLE_USER
-        $roles = $this->roles;    
-        return array_unique($roles);
+        return $this->resetPasswordToken;
     }
-    
 
-public function getUserIdentifier(): string
-{
-    // Retourne l'identifiant unique de l'utilisateur (par exemple, l'email)
-    return $this->email;
-}
-
-public function eraseCredentials(): void
-{
-    // Utilisé pour nettoyer les données sensibles (non obligatoire dans un cas simple)
-}
-
-public function setRoles(array $roles): static
-{
-    $this->roles = $roles;
-
-    return $this;
-}
-
-public function getResetPasswordToken(): ?string
-{
-    return $this->resetPasswordToken;
-}
-
-public function setResetPasswordToken(?string $resetPasswordToken): self
-{
-    $this->resetPasswordToken = $resetPasswordToken;
-    return $this;
-}
+    public function setResetPasswordToken(?string $resetPasswordToken): self
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+        return $this;
+    }
 }
