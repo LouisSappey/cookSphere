@@ -1,30 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ recipe.title }} - Steps{% endblock %}
+{% block title %}Recipe Steps{% endblock %}
 
 {% block body %}
-    <div class="container py-4">
-        <h1>{{ recipe.title }}</h1>
-        
-        {% if recipe.image %}
-            <div class="mb-4">
-                <img src="{{ asset('uploads/recipes/' ~ recipe.image) }}"
-                     alt="{{ recipe.title }}" 
-                     class="img-fluid rounded shadow-sm"
-                     style="max-height: 300px; width: auto;">
-            </div>
-        {% endif %}
-
-        <h1 class="mt-4">Steps for {{ recipe.title }}</h1>
-        <ul class="list-group">
-            {% for step in steps %}
-                <li class="list-group-item">
-                    <strong>Step {{ step.orderNumber }}:</strong> {{ step.description }}
-                </li>
-            {% endfor %}
-        </ul>
-        <a href="{{ path('recipe_index') }}" class="btn btn-primary mt-3">Back to Recipes</a>
-        <a href="{{ path('recipe_step_new', { id: recipe.id }) }}" class="btn btn-success mt-3">Add New Step</a>
-        <a href="{{ path('recipe_comments', {'id': recipe.id}) }}" class="btn btn-primary">View Comments</a>
-    </div>
+    <h1 class="mt-4">Steps for {{ recipe.title }}</h1>
+    <ul class="list-group">
+        {% for step in steps %}
+            <li class="list-group-item">
+                <strong>Step {{ step.orderNumber }}:</strong> {{ step.description }}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ path('recipe_index') }}" class="btn btn-primary mt-3">Back to Recipes</a>
+    <a href="{{ path('recipe_step_new', { id: recipe.id }) }}" class="btn btn-success mt-3">Add New Step</a>
+    <a href="{{ path('recipe_comments', {'id': recipe.id}) }}" class="btn btn-primary">View Comments</a>
 {% endblock %}
