@@ -12,7 +12,6 @@ RUN apt-get update -y && apt-get install -y \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY . /app
-RUN composer install --no-interaction --optimize-autoloader
 RUN composer require symfony/debug-bundle --dev
 EXPOSE 8000
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
