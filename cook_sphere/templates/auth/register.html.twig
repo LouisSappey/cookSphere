@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Register - CookSphere</title>
+</head>
+
+<body class="font-montserrat text-sm bg-white">
+    <div class="flex min-h-screen">
+        <main class="flex-1">
+            <section class="h-full relative">
+                <div class="bg-cover bg-no-repeat h-full before:bg-black/40 before:content-[''] before:top-0 before:left-0 before:right-0 before:absolute before:w-full before:h-full"
+                     style="background-image: url('https://images.unsplash.com/photo-1495521821757-a1efb6729352?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2346&q=80')">
+                    <div class="p-8 lg:w-1/2 mx-auto h-full flex items-center justify-center">
+                        <div class="bg-white rounded-lg p-8 relative w-full shadow-2xl">
+                            <div class="text-center mb-8">
+                                <i class="fas fa-utensils text-3xl text-red-600 mb-4"></i>
+                                <h1 class="text-2xl font-bold">CookSphere</h1>
+                                <p class="text-gray-600 mt-2">Create your account</p>
+                            </div>
+
+                            {{ form_start(registrationForm) }}
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                                            Username
+                                        </label>
+                                        {{ form_widget(registrationForm.username, {
+                                            'attr': {
+                                                'class': 'w-full px-4 py-3 rounded-lg border focus:border-red-500 focus:ring-red-500',
+                                                'placeholder': 'Enter your username'
+                                            }
+                                        }) }}
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                                            Email Address
+                                        </label>
+                                        {{ form_widget(registrationForm.email, {
+                                            'attr': {
+                                                'class': 'w-full px-4 py-3 rounded-lg border focus:border-red-500 focus:ring-red-500',
+                                                'placeholder': 'Enter your email'
+                                            }
+                                        }) }}
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="plainPassword">
+                                            Password
+                                        </label>
+                                        {{ form_widget(registrationForm.plainPassword, {
+                                            'attr': {
+                                                'class': 'w-full px-4 py-3 rounded-lg border focus:border-red-500 focus:ring-red-500',
+                                                'placeholder': 'Create a password'
+                                            }
+                                        }) }}
+                                    </div>
+
+                                    <button href="{{ path('page_login') }}" type="submit" 
+                                            class="w-full bg-red-600 text-white rounded-lg px-4 py-3 mt-6 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                        <i class="fas fa-user-plus mr-2"></i>Register
+                                    </button>
+
+                                    <div class="text-center mt-4">
+                                        <a href="{{ path('page_login') }}" class="text-red-600 hover:text-red-700">
+                                            Already have an account? Sign in
+                                        </a>
+                                    </div>
+                                </div>
+                            {{ form_end(registrationForm) }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html> 
