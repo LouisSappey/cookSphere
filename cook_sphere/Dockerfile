@@ -16,6 +16,10 @@ RUN apt-get update -y && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Add the entrypoint script
+COPY docker-fixtures.sh /usr/local/bin/docker-fixtures.sh
+RUN chmod +x /usr/local/bin/docker-fixtures.sh
+
 # Create a non-root user
 RUN useradd -m appuser
 USER appuser
@@ -36,5 +40,5 @@ RUN composer require debug --no-scripts
 # Expose the application port
 EXPOSE 8000
 
-# Start the PHP built-in web server
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+# Replace the CMD with an entrypoint that runs fixtures and starts the server
+CMD ["/bin/bash", "-c", "/usr/local/bin/docker-fixtures.sh && php -S 0.0.0.0:8000 -t public"]
