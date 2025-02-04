@@ -6,78 +6,100 @@
     <title>CookSphere - Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1495195134817-aeb325a55b65?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        .content-wrapper {
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        {% if app.user %}
-            {% if 'ROLE_BANNED' in app.user.roles %}
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
-                    <p class="font-bold">Account Banned</p>
-                    <p>Your account has been banned. You do not have access to the site. Please contact support for more information.</p>
-                </div>
-                <div class="text-center">
-                    <a href="{{ path('app_logout') }}" class="inline-block bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                    </a>
-                </div>
-            {% else %}
-                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <div>
-                            <h1 class="text-2xl font-bold text-gray-800">Welcome, {{ app.user.username }}!</h1>
-                            <p class="text-gray-600">{{ app.user.email }}</p>
-                        </div>
-                        <a href="{{ path('app_logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+    <div class="container mx-auto px-4 py-8 w-full">
+        <div class="content-wrapper">
+            {% if app.user %}
+                {% if 'ROLE_BANNED' in app.user.roles %}
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                        <p class="font-bold">Account Banned</p>
+                        <p>Your account has been banned. You do not have access to the site. Please contact support for more information.</p>
+                    </div>
+                    <div class="text-center">
+                        <a href="{{ path('app_logout') }}" class="inline-block bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors">
                             <i class="fas fa-sign-out-alt mr-2"></i>Logout
                         </a>
                     </div>
+                {% else %}
+                    <div class="bg-white/80 rounded-lg shadow-lg p-6 mb-6 backdrop-blur-sm">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold text-gray-800">Welcome, {{ app.user.username }}!</h1>
+                                <p class="text-gray-600">{{ app.user.email }}</p>
+                            </div>
+                            <a href="{{ path('app_logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </a>
+                        </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {% if 'ROLE_ADMIN' in app.user.roles %}
-                            <a href="{{ path('admin_index') }}" class="block p-6 bg-green-50 rounded-lg border border-green-200 hover:bg-green-100 transition-colors">
-                                <i class="fas fa-shield-alt text-2xl text-green-600 mb-3"></i>
-                                <h2 class="text-lg font-semibold text-green-700">Admin Dashboard</h2>
-                                <p class="text-green-600">Manage users and site content</p>
-                            </a>
-                            <a href="{{ path('recipe_index') }}" class="block p-6 bg-purple-50 rounded-lg border border-purple-200 hover:bg-purple-100 transition-colors">
-                                <i class="fas fa-utensils text-2xl text-purple-600 mb-3"></i>
-                                <h2 class="text-lg font-semibold text-purple-700">Recipes</h2>
-                                <p class="text-purple-600">Browse and create recipes</p>
-                            </a>
-                        {% endif %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                                <a href="{{ path('admin_index') }}" class="block p-6 bg-green-50 rounded-lg border border-green-200 hover:bg-green-100 transition-colors">
+                                    <i class="fas fa-shield-alt text-2xl text-green-600 mb-3"></i>
+                                    <h2 class="text-lg font-semibold text-green-700">Admin Dashboard</h2>
+                                    <p class="text-green-600">Manage users and site content</p>
+                                </a>
+                                <a href="{{ path('recipe_index') }}" class="block p-6 bg-purple-50 rounded-lg border border-purple-200 hover:bg-purple-100 transition-colors">
+                                    <i class="fas fa-utensils text-2xl text-purple-600 mb-3"></i>
+                                    <h2 class="text-lg font-semibold text-purple-700">Recipes</h2>
+                                    <p class="text-purple-600">Browse and create recipes</p>
+                                </a>
+                            {% endif %}
 
-                        {% if 'ROLE_USER' in app.user.roles %}
-                            <a href="{{ path('user_profile') }}" class="block p-6 bg-blue-50 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors">
-                                <i class="fas fa-user text-2xl text-blue-600 mb-3"></i>
-                                <h2 class="text-lg font-semibold text-blue-700">Your Profile</h2>
-                                <p class="text-blue-600">View and edit your profile</p>
-                            </a>
+                            {% if 'ROLE_USER' in app.user.roles %}
+                                <a href="{{ path('user_profile') }}" class="block p-6 bg-blue-50 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors">
+                                    <i class="fas fa-user text-2xl text-blue-600 mb-3"></i>
+                                    <h2 class="text-lg font-semibold text-blue-700">Your Profile</h2>
+                                    <p class="text-blue-600">View and edit your profile</p>
+                                </a>
 
-                            <a href="{{ path('recipe_index') }}" class="block p-6 bg-purple-50 rounded-lg border border-purple-200 hover:bg-purple-100 transition-colors">
-                                <i class="fas fa-utensils text-2xl text-purple-600 mb-3"></i>
-                                <h2 class="text-lg font-semibold text-purple-700">Recipes</h2>
-                                <p class="text-purple-600">Browse and create recipes</p>
+                                <a href="{{ path('recipe_index') }}" class="block p-6 bg-purple-50 rounded-lg border border-purple-200 hover:bg-purple-100 transition-colors">
+                                    <i class="fas fa-utensils text-2xl text-purple-600 mb-3"></i>
+                                    <h2 class="text-lg font-semibold text-purple-700">Recipes</h2>
+                                    <p class="text-purple-600">Browse and create recipes</p>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="max-w-md mx-auto bg-white/90 rounded-lg shadow-lg overflow-hidden backdrop-blur-sm">
+                    <div class="p-8">
+                        <div class="text-center mb-8">
+                            <i class="fas fa-utensils text-5xl text-blue-500 mb-6"></i>
+                            <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome to CookSphere</h1>
+                            <p class="text-gray-600 text-lg">Your culinary journey begins here</p>
+                            <p class="text-gray-600 mt-2">Please login to access the site</p>
+                        </div>
+                        <div class="space-y-4">
+                            <a href="{{ path('page_login') }}" 
+                               class="block w-full bg-blue-500 text-white text-center px-6 py-4 rounded-lg hover:bg-blue-600 transition-all transform hover:scale-105 text-lg font-semibold">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Login
                             </a>
-                        {% endif %}
+                        </div>
                     </div>
                 </div>
             {% endif %}
-        {% else %}
-            <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-                <div class="p-8">
-                    <div class="text-center mb-8">
-                        <i class="fas fa-utensils text-4xl text-blue-500 mb-4"></i>
-                        <h1 class="text-2xl font-bold text-gray-800">Welcome to CookSphere</h1>
-                        <p class="text-gray-600 mt-2">Please login to access the site</p>
-                    </div>
-                    <div class="space-y-4">
-                        <a href="{{ path('page_login') }}" class="block w-full bg-blue-500 text-white text-center px-4 py-3 rounded-lg hover:bg-blue-600 transition-colors">
-                            <i class="fas fa-sign-in-alt mr-2"></i>Login
-                        </a>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+        </div>
     </div>
 </body>
 </html>
