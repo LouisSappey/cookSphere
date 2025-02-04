@@ -120,4 +120,10 @@ class AuthController extends AbstractController
     
         return $this->render('auth/reset.html.twig', ['token' => $token]);
     }
+
+    #[Route('/', name: 'app_home')]
+    public function home(): Response
+    {
+        return $this->render('index.html.twig');
+    }
 }
