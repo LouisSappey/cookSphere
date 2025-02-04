@@ -13,7 +13,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           tools: composer
-      - run: composer install --prefer-dist --no-progress
-      - run: composer phpstan
+      - name: Install Dependencies
+        working-directory: ./cook_sphere
+        run: composer install --prefer-dist --no-progress
+      - name: Run PHPStan
+        working-directory: ./cook_sphere
+        run: composer phpstan
