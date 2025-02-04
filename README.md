@@ -27,26 +27,71 @@ After that you can go to cook_sphere folder and launch fixtures:
 ./launch-fixtures.sh
 ```
 
--Adminer is at localhost:8080 (see .env for mdp it's in postgresql)
+-Adminer is at
 
--Front is at localhost:8000
+```
+localhost:8080
+```
 
--To see if email sent: localhost:8090
+ (see .env for mdp it's in postgresql)
 
-You can log with this user with role admin:
+-Front is at
 
-email: user1@example.com
+```
+localhost:8000
+```
 
-password: password123
+-To see if email sent:
 
-For user with role user:
+```
+localhost:8090
+```
 
-email: user2@example.com
+**You can log with this user with role admin:**
 
-password: password123
+email:
 
-For user with role banned:
+```
+ user1@example.com
+```
 
-email: user3@example.com
+password:
 
-password: password123
+```
+password123
+```
+
+**For user with role user:**
+
+email:
+
+```
+user2@example.com
+```
+
+password:
+
+```
+password123
+```
+
+**For user with role banned:**
+
+email:
+
+```
+user3@example.com
+```
+
+password:
+
+```
+password123
+```
+
+
+**To launch test:**
+
+```
+php bin/phpunit
+```
