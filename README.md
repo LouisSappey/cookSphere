@@ -1,4 +1,4 @@
-# php-symfony-tp
+# CookSphere
 
 **See live version at: https://cooksphere.onrender.com/**
 
