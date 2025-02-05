@@ -50,7 +50,7 @@ class AuthController extends AbstractController
             $entityManager->flush();
     
             $emailMessage = (new \Symfony\Bridge\Twig\Mime\TemplatedEmail())
-                ->from('contact@cook_sphere.fr')
+                ->from('louis.sappey@hotmail.com')
                 ->to($user->getEmail())
                 ->subject('Réinitialisation de votre mot de passe')
                 ->htmlTemplate('email/reset.html.twig')
@@ -66,7 +66,7 @@ class AuthController extends AbstractController
                 $mailer->send($emailMessage);
                 $this->addFlash('success', 'Un lien de réinitialisation a été envoyé à votre adresse email.');
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de l\'email.');
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de l\'email : ' . $e->getMessage());
             }
     
             return $this->redirectToRoute('page_forgot_password');
