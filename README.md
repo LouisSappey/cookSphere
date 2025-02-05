@@ -3,6 +3,7 @@
 **See live version at: https://cooksphere.onrender.com/**
 
 Host with : https://render.com/
+Send Email with: https://app.brevo.com/
 
 **Launch the project with docker.**
 
