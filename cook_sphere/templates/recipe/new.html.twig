@@ -56,10 +56,24 @@
         </div>
 
         <button class="btn btn-success" id="add-step">Add Step</button>
-        <button class="btn btn-primary">Create Recipe</button>  
+        <button type="submit" class="btn btn-primary">Create Recipe</button>
+        <button type="button" class="btn btn-secondary" id="getRandomRecipe">No idea? Get inspiration!</button>
         <a href="{{ path('recipe_index') }}" class="btn btn-secondary">Cancel</a>
-{{ form_end(form) }}
     {{ form_end(form) }}
+
+    <!-- Modal -->
+    <div class="modal fade" id="recipeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Recipe Inspiration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="recipeModalContent">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.getElementById('add-step').addEventListener('click', function(e) {
@@ -75,6 +89,40 @@
             if (e.target.classList.contains('remove-step')) {
                 e.preventDefault();
                 e.target.closest('.step').remove();
+            }
+        });
+
+        document.getElementById('getRandomRecipe').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/random-recipe');
+                const data = await response.json();
+                const recipe = data.meals[0];
+                
+                let ingredients = '';
+                for (let i = 1; i <= 20; i++) {
+                    if (recipe[`strIngredient${i}`]) {
+                        ingredients += `<li>${recipe[`strMeasure${i}`]} ${recipe[`strIngredient${i}`]}</li>`;
+                    }
+                }
+                const instructions = recipe.strInstructions
+                    .split(/\r\n|\r|\n/)
+                    .filter(step => step.trim() !== '')
+                    .map((step, index) => `<p>${index + 1}. ${step.trim()}</p>`)
+                    .join('');
+
+                const content = `
+                    <h3>${recipe.strMeal}</h3>
+                    <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" style="max-width: 200px">
+                    <h4>Ingredients:</h4>
+                    <ul>${ingredients}</ul>
+                    <h4>Instructions:</h4>
+                    ${instructions}
+                `;
+                
+                document.getElementById('recipeModalContent').innerHTML = content;
+                new bootstrap.Modal(document.getElementById('recipeModal')).show();
+            } catch (error) {
+                console.error('Error:', error);
             }
         });
     </script>
