@@ -1,0 +1,37 @@
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="form-group">
+            {{ form_label(form.preparationTime) }}
+            <div class="input-group">
+                {{ form_widget(form.preparationTime) }}
+                <span class="input-group-text">min</span>
+            </div>
+            <small class="form-text text-muted">{{ form_help(form.preparationTime) }}</small>
+            {{ form_errors(form.preparationTime) }}
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="form-group">
+            {{ form_label(form.cookingTime) }}
+            <div class="input-group">
+                {{ form_widget(form.cookingTime) }}
+                <span class="input-group-text">min</span>
+            </div>
+            <small class="form-text text-muted">{{ form_help(form.cookingTime) }}</small>
+            {{ form_errors(form.cookingTime) }}
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="form-group">
+            {{ form_label(form.servings) }}
+            <div class="input-group">
+                {{ form_widget(form.servings) }}
+                <span class="input-group-text">people</span>
+            </div>
+            <small class="form-text text-muted">{{ form_help(form.servings) }}</small>
+            {{ form_errors(form.servings) }}
+        </div>
+    </div>
+</div> 
